@@ -150,8 +150,11 @@ def get_service_details_by_service_id(service_id):
     return Optional.empty()
 
 
-def call_service_is_broken(service_id, customer_id):
+def call_service_is_broken(customer_id, service_id):
     connection = http.client.HTTPSConnection('nnsu-nc.herokuapp.com')
     connection.request('GET', '/services/search/setServiceStatusFailByCustomer_IdAndService_Id?'
                               'customerId=' + str(customer_id) + '&serviceId' + str(service_id))
+    response = connection.getresponse()
+    print('service is broken status: ' + str(response.code))
+    connection.close()
     return

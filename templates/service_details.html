@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        :root {
+            --grey-light: #FAFAFA;
+            --grey-dark: #616161;
+            --bg-white: #FFFFFF;
+            --status-bad-color: #EAC4D5;
+            --bg-blue-dark: #1976d2;
+            --status-good-color: #D6EADF;
+            font-family: Arial, serif;
+            color: var(--grey-dark);
+            background: var(--grey-light);
+        }
+
+        .header {
+            background: var(--bg-blue-dark);
+            font-size: 30px;
+            height: 80px;
+            color: var(--grey-light);
+            padding: 30px 0 0 20px;
+        }
+
+        .container {
+            margin: 0 auto;
+            max-width: 800px;
+            min-width: 800px;
+            background: var(--grey-light);
+            height: calc(100vh - 170px);
+            padding: 20px;
+            border-radius: 2px;
+
+        }
+
+        .app {
+            font-family: Arial;
+            color: var(--grey-dark);
+            background: var(--grey-light);
+        }
+
+        .app a, .app a:visited, .app a:hover, .app a:active {
+            cursor: pointer;
+            color: var(--bg-blue-dark);
+            text-decoration: none;
+        }
+
+        .app button {
+            padding: 5px;
+            height: 34px;
+            min-width: 100px;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            background: var(--bg-blue-dark);
+            color: var(--bg-white);
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .app button:hover {
+            opacity: 0.8;
+            cursor: pointer;
+        }
+
+        .app a:hover {
+            opacity: 0.8;
+        }
+
+        .component {
+            background: var(--bg-white);
+            padding: 20px 40px 35px 40px;
+            border-radius: 2px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 14px;
+            font-family: Arial;
+            text-decoration: none;
+        }
+
+        .object-header {
+            font-size: 20px;
+            line-height: 45px;
+            border-bottom: 1px solid var(--grey-light);
+            margin-bottom: 15px;
+        }
+
+        .object-children-records {
+            margin: 15px 0 0 0;
+        }
+
+        .object-children-records-content {
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .object-children-record {
+            margin: 5px 5px 5px 5px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--grey-light);;
+            border-radius: 4px;
+            height: 40px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .object-children-record-content {
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+
+        .object-details-content {
+            background: var(--bg-white);
+            margin: 5px 5px 5px 5px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .object-details-grid {
+            margin: 8px 20px 8px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-row-gap: 8px;
+        }
+
+        .child-status {
+            width: 14px;
+            height: 14px;
+            border-radius: 7px;
+            border: 1px solid var(--grey-light);
+            display: inline-block;
+        }
+
+        .child-status.fail {
+            background: var(--status-bad-color);
+        }
+
+        .child-status.normal {
+            background: var(--status-good-color);
+        }
+
+        .child-status.maintenance {
+            background: yellow;
+        }
+
+        .child-status.toreplace {
+            background: orange;
+        }
+
+        .service-details-equipment-line-name {
+            margin-left: 15px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <span>Customer Sales Representative Workspace Py</span>
+    </div>
+    <div class="container">
+        <div class="navigation">
+            <a href="/">BACK TO SEARCH</a>
+        </div>
+        <div class="component">
+            <div class="object-header">
+                <label>Service details</label>
+            </div>
+            <div class="object-details">
+                {% if service is not None %}
+                    <div class="object-details-content">
+                        <div class="object-details-grid">
+                            <label class="service-details-service-content-label">ID:</label><span>{{ service.id }}</span>
+                            <label class="service-details-service-content-label">Name:</label><span>{{ service.name }}</span>
+                            <label class="service-details-service-content-label">Status:</label><span>{{ service.service_status.name }}</span>
+                        </div>
+                        <form method="post" action="/customer/{{ customer_id }}/service/{{ service.id }}/broken">
+                            {% csrf_token %}
+                            <button type="submit" {% if service.status.id == 1 %}{{ 'disabled' }}{% endif %}>It's
+                                Broken!
+                            </button>
+                        </form>
+                    </div>
+                {% endif %}
+                <div class="object-children-records">
+                    <label>Hardware</label>
+                    {% if service.hardwares is not none %}
+                        <div class="object-children-records-content">
+                            {% for hardware in service.hardwares %}
+                                <div class="object-children-record">
+                                    <div class="object-children-record-content">
+                                        <span class="child-status
+                                        {% if hardware.status.id is 1 %}{{ 'normal' }}
+                                        {% elif hardware.status.id is 2 %}{{ 'fail' }}
+                                        {% elif hardware.status.id is 3 %}{{ 'maintenance' }}
+                                        {% elif hardware.status.id is 4 %}{{ 'toreplace' }}
+                                        {% endif %}">
+                                        </span>
+                                        <span class="service-details-equipment-line-name">{{ hardware.name }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

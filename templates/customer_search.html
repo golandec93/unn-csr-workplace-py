@@ -1,0 +1,173 @@
+<html>
+<head>
+    <title>CSR Workplace</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.js"></script>
+</head>
+<style>
+    :root {
+        --grey-light: #FAFAFA;
+        --grey-dark: #616161;
+        --bg-white: #FFFFFF;
+        --status-bad-color: #EAC4D5;
+        --bg-blue-dark: #1976d2;
+        --status-good-color: #D6EADF;
+        font-family: Arial, serif;
+        color: var(--grey-dark);
+        background: var(--grey-light);
+    }
+
+    .header {
+        background: var(--bg-blue-dark);
+        font-size: 30px;
+        height: 80px;
+        color: var(--grey-light);
+        padding: 30px 0 0 20px;
+    }
+
+    .container {
+        margin: 0 auto;
+        max-width: 800px;
+        min-width: 800px;
+        background: var(--grey-light);
+        height: calc(100vh - 170px);
+        padding: 20px;
+        border-radius: 2px;
+
+    }
+
+    .app {
+        font-family: Arial;
+        color: var(--grey-dark);
+        background: var(--grey-light);
+    }
+
+    .app a, .app a:visited, .app a:hover, .app a:active {
+        cursor: pointer;
+        color: var(--bg-blue-dark);
+        text-decoration: none;
+    }
+
+    .app button {
+        padding: 5px;
+        height: 34px;
+        min-width: 100px;
+        border: none;
+        border-radius: 0 3px 3px 0;
+        background: var(--bg-blue-dark);
+        color: var(--bg-white);
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .app button:hover {
+        opacity: 0.8;
+        cursor: pointer;
+    }
+
+    .app a:hover {
+        opacity: 0.8;
+    }
+
+    .component {
+        background: var(--bg-white);
+        padding: 20px 40px 35px 40px;
+        border-radius: 2px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        font-family: Arial;
+        text-decoration: none;
+    }
+
+    .object-header {
+        font-size: 20px;
+        line-height: 45px;
+        border-bottom: 1px solid var(--grey-light);
+        margin-bottom: 15px;
+    }
+
+    .search-input {
+        background: var(--bg-white);
+        margin: 5px 5px 5px 5px;
+        padding: 10px 10px 10px 10px;
+        height: 60px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input input {
+        height: 32px;
+        border: none;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        border-radius: 3px 0 0 3px;
+        margin-left: 25px;
+        padding-left: 10px;
+    }
+
+    .search-result {
+        margin: 5px 5px 5px 5px;
+        background: var(--bg-white);
+        border-bottom: 1px solid var(--grey-light);;
+        border-radius: 4px;
+        height: 40px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+
+    .child-status {
+        width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        border: 1px solid var(--grey-light);
+        display: inline-block;
+    }
+
+    .child-status.fail {
+        background: var(--status-bad-color);
+    }
+
+    .child-status.normal {
+        background: var(--status-good-color);
+    }
+
+    .child-status.maintenance {
+        background: yellow;
+    }
+
+</style>
+<body>
+<div class="app">
+    <div class="header">
+        <span>Customer Sales Representative Workspace Py</span>
+    </div>
+    <div class="container">
+        <div class="navigation">
+            <a href="/">BACK TO SEARCH</a>
+        </div>
+        <div class="component">
+            <div class="object-header">
+                <span>Customer Search</span>
+            </div>
+            <div class="search-input">
+                <form action="/customer/" method="post">
+                    {% csrf_token %}
+                    {{ customer_search_form }}
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="search-result">
+                {% if customer is not None %}
+                    <div class="search-result-customer-name">
+                        <a href="/customer/{{ customer.id }}">
+                            {{ customer.first_name }} {{ customer.last_name }}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
