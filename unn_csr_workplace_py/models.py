@@ -115,7 +115,7 @@ class Status:
 
 
 def get_customer_by_phone(phone_number):
-    connection = http.client.HTTPSConnection('nnsu-nc.herokuapp.com')
+    connection = http.client.HTTPSConnection('mk-nc.herokuapp.com')
     connection.request('GET', '/customers/search/getCustomerByPhoneNumber?phoneNumber=' + phone_number)
     response = connection.getresponse()
     if 200 <= response.code < 300:
@@ -127,7 +127,7 @@ def get_customer_by_phone(phone_number):
 
 
 def get_customer_details_by_customer_id(customer_id):
-    connection = http.client.HTTPSConnection('nnsu-nc.herokuapp.com')
+    connection = http.client.HTTPSConnection('mk-nc.herokuapp.com')
     connection.request('GET', '/customers/' + str(customer_id) + '?projection=plain')
     response = connection.getresponse()
     if 200 <= response.code < 300:
@@ -139,7 +139,7 @@ def get_customer_details_by_customer_id(customer_id):
 
 
 def get_service_details_by_service_id(service_id):
-    connection = http.client.HTTPSConnection('nnsu-nc.herokuapp.com')
+    connection = http.client.HTTPSConnection('mk-nc.herokuapp.com')
     connection.request('GET', '/services/' + str(service_id) + '?projection=plain')
     response = connection.getresponse()
     if 200 <= response.code < 300:
@@ -151,7 +151,7 @@ def get_service_details_by_service_id(service_id):
 
 
 def call_service_is_broken(customer_id, service_id):
-    connection = http.client.HTTPSConnection('nnsu-nc.herokuapp.com')
+    connection = http.client.HTTPSConnection('mk-nc.herokuapp.com')
     connection.request('GET', '/services/search/setServiceStatusFailByService_Id?'
                               '&serviceId=' + str(service_id))
     response = connection.getresponse()
